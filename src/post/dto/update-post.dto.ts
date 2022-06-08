@@ -13,4 +13,7 @@ export class UpdatePostDto {
     @IsBoolean()
     public   published: boolean;
 
+    @IsNumber()
+    public authorId:number
+
 }
