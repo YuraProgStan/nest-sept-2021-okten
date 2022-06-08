@@ -23,18 +23,15 @@ export class PostService {
     }
 
 
-    updatePost(postData: Prisma.PostUpdateInput, postId: string): Promise<Post> {
-        return this.prismaService.post.update(
-            {
+    updatePost(postData: Prisma.PostUpdateInput, postId: string) {
+        return this.prismaService.post.update({
                 where: {id: Number(postId)},
                 data: {
                     title: postData.title,
                     content: postData.content,
                     published: postData.published,
-                    authorId: postData.authorId
                 }
-            }
-        )
+            })
     }
 
     deletePost(postId: string): Promise<Post> {

@@ -1,6 +1,6 @@
 import {IsBoolean, IsNotEmpty, IsNumber, IsString, Length} from "class-validator";
 
-export class UpdatePostDto {
+export class PostUpdateDto {
     @IsString()
     @Length(2, 100)
     @IsNotEmpty()
@@ -13,7 +13,8 @@ export class UpdatePostDto {
     @IsBoolean()
     public   published: boolean;
 
-    @IsNumber()
-    public authorId:number
+
+
+
 
 }

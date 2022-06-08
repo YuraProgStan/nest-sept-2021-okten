@@ -1,7 +1,7 @@
 import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put} from '@nestjs/common';
 import {PostService} from "./post.service";
 import {CreatePostDto} from "./dto/create-post.dto";
-import {UpdatePostDto} from "./dto/update-post.dto";
+import {PostUpdateDto} from "./dto/post-update.dto";
 import {ApiOkResponse, ApiOperation, ApiTags} from "@nestjs/swagger";
 
 @Controller('posts')
@@ -21,6 +21,10 @@ export class PostController {
     @ApiOkResponse({status: 200, schema: {
         example: {
             id:1,
+            title: 'My title2',
+            content: 'My content',
+            published: false,
+            authorId: 1
         }
         }})
     @HttpCode(HttpStatus.OK)
@@ -44,7 +48,7 @@ export class PostController {
 
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
-    updatePost(@Body() postUpdateDto: UpdatePostDto, @Param('id') id:string,){
+    updatePost(@Body() postUpdateDto: PostUpdateDto, @Param('id') id:string,){
         return this.postService.updatePost(postUpdateDto,id);
     }
 }
