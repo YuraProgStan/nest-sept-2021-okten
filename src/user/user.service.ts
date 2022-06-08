@@ -31,11 +31,12 @@ constructor(private prismaService: PrismaService) {
         });
     }
 
-    // delete(id: string) {
-    //     const userIndex = this.users.findIndex(item => item.id === +id)
-    //     this.users.splice(userIndex, 1);
-    //     return "User has been deleted"
-    // }
+    deleteUser(userId: string): Promise<User>{
+    return this.prismaService.user.delete({
+        where: {id: Number(userId)},
+    })
+    }
+
 
 
 

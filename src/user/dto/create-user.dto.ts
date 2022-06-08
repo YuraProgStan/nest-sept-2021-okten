@@ -3,7 +3,6 @@ import {ApiProperty} from "@nestjs/swagger";
 
 export class CreateUserDto {
 
-
     @IsString()
     @Length(2,10)
     @IsNotEmpty()

@@ -1,36 +1,45 @@
 import {Injectable} from '@nestjs/common';
-import {PostCreateDto} from "./dto/post-create.dto";
-import {PostUpdateDto} from "./dto/post-update.dto";
+import {PrismaService} from "../core/prisma.service";
+import {Prisma, Post} from '@prisma/client';
 
 @Injectable()
 export class PostService {
-    private posts = []
-
-    getAll() {
-        return this.posts;
+    constructor(private prismaService: PrismaService) {
     }
 
-    getById(id: string){
-        return this.posts.find(item => item.id === +id)
+    getAllPosts(): Promise<Post[]> {
+        return this.prismaService.post.findMany();
     }
 
-    create(postDto: PostCreateDto) {
-        this.posts.push({
-            id: Date.now(),
-            ...postDto
+    getOneById(postId: string): Promise<Post> {
+        return this.prismaService.post.findUnique({
+            where: {id: Number(postId)},
+            include: {comments: true}
         })
-        return postDto;
     }
 
-   delete (id: string){
-        const findIndex = this.posts.findIndex(item => item.id = +id);
-        this.posts = this.posts.splice(findIndex, 1);
-        return 'Post has been deleted'
-   }
+    createPost(data: Prisma.PostCreateInput): Promise<Post> {
+        return this.prismaService.post.create({data});
+    }
 
-    update (id: string, postDto: PostUpdateDto){
-        const findIndex = this.posts.findIndex(item => item.id = +id);
-        this.posts[findIndex] = {id, ...postDto};
-        return this.posts[findIndex];
+
+    updatePost(postData: Prisma.PostUpdateInput, postId: string): Promise<Post> {
+        return this.prismaService.post.update(
+            {
+                where: {id: Number(postId)},
+                data: {
+                    title: postData.title,
+                    content: postData.content,
+                    published: postData.published,
+                    authorId: postData.authorId
+                }
+            }
+        )
+    }
+
+    deletePost(postId: string): Promise<Post> {
+        return this.prismaService.post.delete({
+            where: {id: Number(postId)}
+        })
     }
 }

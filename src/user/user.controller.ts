@@ -7,7 +7,7 @@ import {User} from "@prisma/client";
 
 @Controller('users')
 export class UserController {
-    constructor(private readonly userService: UserService) {
+    constructor(private userService: UserService) {
     }
 
     @ApiTags ('users')
@@ -41,15 +41,15 @@ export class UserController {
         return this.userService.createUser(userDto);
     }
 
-    // @HttpCode(HttpStatus.OK)
-    // @Delete('/:id')
-    // delete(@Param('id')id: string){
-    //     return this.userService.delete(id)
-    // }
+    @HttpCode(HttpStatus.OK)
+    @Delete('/:id')
+    delete(@Param('id')id: string){
+        return this.userService.deleteUser(id)
+    }
 
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
-    updateUser(@Body() updateDto: UpdateUserDto, @Param('id')id: string,) {
+    updateUser(@Body() updateDto: UpdateUserDto, @Param('id')id: string) {
         return this.userService.updateUser(updateDto, id);
     }
 }
