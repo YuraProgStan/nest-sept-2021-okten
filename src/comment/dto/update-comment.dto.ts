@@ -3,9 +3,9 @@ import {IsBoolean, IsNotEmpty, IsString} from "class-validator";
 export class UpdateCommentDto {
     @IsString()
     @IsNotEmpty()
-    text;
+    public text;
 
     @IsBoolean()
-    published;
+    public published;
 
 }

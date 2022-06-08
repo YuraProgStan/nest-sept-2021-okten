@@ -1,17 +1,16 @@
 import {IsBoolean, IsNotEmpty, IsNumber, IsString} from "class-validator";
 
 export class CreateCommentDto {
-
     @IsString()
     @IsNotEmpty()
-   text;
+   public text;
 
     @IsBoolean()
-   published;
+  public published;
 
     @IsNumber()
-   authorId;
+  public authorId;
 
     @IsNumber()
-   postId;
+ public  postId;
 }
