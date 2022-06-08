@@ -1,4 +1,5 @@
 export class UpdateUserDto {
-    public username: string;
+    public name: string;
     public age: number;
+    public city: string;
 }
