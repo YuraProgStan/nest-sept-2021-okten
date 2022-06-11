@@ -16,9 +16,15 @@ export class CreateCommentDto {
     @IsBoolean()
   public published;
 
+    @ApiProperty({
+        example: 2, description: 'authorId'
+    })
     @IsNumber()
   public authorId;
 
+    @ApiProperty({
+        example: 3, description: 'postId'
+    })
     @IsNumber()
  public  postId;
 }

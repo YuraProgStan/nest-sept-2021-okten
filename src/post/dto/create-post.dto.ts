@@ -19,9 +19,15 @@ export class CreatePostDto {
     public content: string;
 
 
+    @ApiProperty({
+        example: true, description: 'published'
+    })
     @IsBoolean()
     public   published: boolean;
 
+    @ApiProperty({
+        example: 2, description: 'authorId'
+    })
     @IsNumber()
     @IsNotEmpty()
     public authorId: number;
