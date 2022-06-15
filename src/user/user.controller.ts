@@ -22,8 +22,6 @@ import {imageFileFilter} from "../utils/image.filter";
 import {watchFile} from "fs";
 import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
 
-let filenameImage;
-
 @ApiTags('users')
 @Controller('users')
 export class UserController {
@@ -109,43 +107,17 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     @UseInterceptors(
-        // FileInterceptor('avatar', {
-        //     storage: diskStorage({
-        //         destination: './avatars',
-        //         filename: (req, file, callback) => {
-        //             const randomName = Array(32)
-        //                 .fill(null)
-        //                 .map(() => Math.round(Math.random() * 16).toString(16))
-        //                 .join('');
-        //             filenameImage = randomName;
-        //             return callback(null, `${randomName}${file.originalname}`);
-        //
-        //         }
-        //     }),
-        //     fileFilter: imageFileFilter
-        // })
-
-        FileInterceptor('avatar')
+        FileInterceptor('avatar',{fileFilter: imageFileFilter})
     )
     updateUser(
         @Body() updateDto: UpdateUserDto,
         @Param('id') id: string,
-        // @UploadedFile() avatar: Express.Multer.File)
-        @UploadedFile() file)
+        @UploadedFile() file: Express.Multer.File)
     {
-
-        console.log('avatar');
-        let newAvatarPath: string = null;
         try {
-            // if (avatar) {
-            //     newAvatarPath = `avatars/${filenameImage}${avatar.originalname}`;
-            // }
-            // updateDto.avatar = newAvatarPath;
             return this.userService.updateUser(updateDto, id, file);
-
         } catch (e) {
             console.log(e)
-            //можно сделать fs.unlink, если не получилось сделать запрос в базу
         }
 
     }
