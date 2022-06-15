@@ -140,7 +140,7 @@ export class UserController {
             // if (avatar) {
             //     newAvatarPath = `avatars/${filenameImage}${avatar.originalname}`;
             // }
-            updateDto.avatar = newAvatarPath;
+            // updateDto.avatar = newAvatarPath;
             return this.userService.updateUser(updateDto, id, file);
 
         } catch (e) {
