@@ -33,9 +33,9 @@ constructor(private prismaService: PrismaService, private fileUploadAwsService:F
     updateUser(userData: UpdateUserDto, userId: string, file) {
         try{
             if(file){
-            const avatarPath = this.fileUploadPath(file, 'avatar', userId);
-            console.log(avatarPath);
-            // return this.prismaService.user.update({
+            const avatarPath= this.fileUploadPath(file, 'avatar', userId);
+                console.log(avatarPath);
+                // return this.prismaService.user.update({
             //     where: {id: Number(userId)},
             //     data: {name: userData.name, city:userData.city,  age:Number(userData.age), avatar: avatarPath}
             // });

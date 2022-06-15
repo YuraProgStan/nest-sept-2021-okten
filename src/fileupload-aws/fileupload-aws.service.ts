@@ -5,22 +5,30 @@ import {S3} from "aws-sdk";
 @Injectable()
 export class FileUploadAwsService {
     async upload(file, itemType, itemId) {
+        console.log(file)
         const { originalname } = file;
-        const bucketS3 = process.env.AWS_NAME;
-        await this.uploadS3(file.buffer, bucketS3, itemType, itemId);
+        const bucketS3 = process.env.S3_NAME;
+        await this.uploadS3(file.buffer, bucketS3, itemType, itemId, originalname);
     }
 
- private   async uploadS3(file, bucket, itemType, itemId) {
-        const uploadFilePath = this.fileNameBuilder(file.originalname, itemType, itemId);
+ private   async uploadS3(file, bucket, itemType, itemId, originalname) {
+
+        const uploadFilePath = this.fileNameBuilder(originalname, itemType, itemId);
+        console.log(uploadFilePath)
         const s3 = this.getS3();
         const params = {
             Bucket: bucket as string,
-            Key: String(name),
+            Key: uploadFilePath,
             Body: file,
+            ContentType: file.mimetype,
+            ACL: 'public-read'
         };
 
         try{
-            return   await s3.upload(params).promise();
+            const uploadResult = await s3.upload(params).promise();
+            const  url = uploadResult.Location;
+            console.log(url);
+            return  url
         }catch (e) {
             throw  new HttpException('problem with uploading file on aws', HttpStatus.BAD_REQUEST)
         }
@@ -39,15 +47,15 @@ export class FileUploadAwsService {
             .fill(null)
             .map(() => Math.round(Math.random() * 16).toString(16))
             .join('');
-        const fileExtension = path.extname(fileName); //.png
+
         return `${itemType}/${itemId}/${randomName}${fileName}`
     }
 
   getS3() {
         return new S3({
-            region: process.env.AWS_REGION,
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            region: process.env.S3_REGION,
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_KEY,
         });
     }
 }

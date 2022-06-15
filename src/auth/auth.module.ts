@@ -5,9 +5,10 @@ import {JwtModule, JwtService} from "@nestjs/jwt";
 import {UserModule} from "../user/user.module";
 import {UserService} from "../user/user.service";
 import {PrismaService} from "../core/prisma.service";
+import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
 
 @Module({
-  providers: [AuthService, UserService, PrismaService],
+  providers: [AuthService, UserService, PrismaService,FileUploadAwsService],
   controllers: [AuthController],
   imports: [
     forwardRef(() => UserModule),
