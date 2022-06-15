@@ -20,6 +20,7 @@ import {FileInterceptor} from "@nestjs/platform-express";
 import {diskStorage} from "multer";
 import {imageFileFilter} from "../utils/image.filter";
 import {watchFile} from "fs";
+import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
 
 let filenameImage;
 
@@ -108,34 +109,39 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     @UseInterceptors(
-        FileInterceptor('avatar', {
-            storage: diskStorage({
-                destination: './avatars',
-                filename: (req, file, callback) => {
-                    const randomName = Array(32)
-                        .fill(null)
-                        .map(() => Math.round(Math.random() * 16).toString(16))
-                        .join('');
-                    filenameImage = randomName;
-                    return callback(null, `${randomName}${file.originalname}`);
+        // FileInterceptor('avatar', {
+        //     storage: diskStorage({
+        //         destination: './avatars',
+        //         filename: (req, file, callback) => {
+        //             const randomName = Array(32)
+        //                 .fill(null)
+        //                 .map(() => Math.round(Math.random() * 16).toString(16))
+        //                 .join('');
+        //             filenameImage = randomName;
+        //             return callback(null, `${randomName}${file.originalname}`);
+        //
+        //         }
+        //     }),
+        //     fileFilter: imageFileFilter
+        // })
 
-                }
-            }),
-            fileFilter: imageFileFilter
-        })
+        FileInterceptor('avatar')
     )
     updateUser(
         @Body() updateDto: UpdateUserDto,
         @Param('id') id: string,
-        @UploadedFile() avatar: Express.Multer.File) {
+        // @UploadedFile() avatar: Express.Multer.File)
+        @UploadedFile() file)
+    {
+
         console.log('avatar');
         let newAvatarPath: string = null;
         try {
-            if (avatar) {
-                newAvatarPath = `avatars/${filenameImage}${avatar.originalname}`;
-            }
+            // if (avatar) {
+            //     newAvatarPath = `avatars/${filenameImage}${avatar.originalname}`;
+            // }
             updateDto.avatar = newAvatarPath;
-            return this.userService.updateUser(updateDto, id);
+            return this.userService.updateUser(updateDto, id, file);
 
         } catch (e) {
             console.log(e)

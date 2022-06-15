@@ -1,7 +1,6 @@
 import {SubscribeMessage, WebSocketGateway, WebSocketServer} from "@nestjs/websockets";
 import {Server, Socket} from "socket.io";
 import {AuthService} from "../auth/auth.service";
-import {UnauthorizedException} from "@nestjs/common";
 
 @WebSocketGateway({
     pingTimeout: 60*60

@@ -48,7 +48,7 @@ export class AuthService {
             // const token = this.getTokenFromJwt(jwt);
           const token = jwt.split(' ')[1];
             const user = await this.jwtService.verify(token,{publicKey:'Secret'});
-            return user.id;
+            return user.name;
             //return user.role
         }catch (e){
             console.log(e);
