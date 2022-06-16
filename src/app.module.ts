@@ -8,10 +8,12 @@ import { CommentModule } from './comment/comment.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { FileUploadAwsModule } from './fileupload-aws/fileupload-aws.module';
+import { FileUploadCloudinaryModule } from './fileupload-cloudinary/fileupload-cloudinary.module';
+
 
 @Module({
-  imports: [UserModule, PostModule, CommentModule, AuthModule, ChatModule, FileUploadAwsModule],
-  controllers: [AppController, ],
+  imports: [UserModule, PostModule, CommentModule, AuthModule, ChatModule, FileUploadAwsModule, FileUploadCloudinaryModule],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

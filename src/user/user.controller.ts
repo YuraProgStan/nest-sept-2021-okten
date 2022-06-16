@@ -107,7 +107,7 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     @UseInterceptors(
-        FileInterceptor('avatar',{fileFilter: imageFileFilter})
+        FileInterceptor('avatar',{fileFilter: imageFileFilter, limits: {fileSize: 1024*1024}})
     )
     updateUser(
         @Body() updateDto: UpdateUserDto,

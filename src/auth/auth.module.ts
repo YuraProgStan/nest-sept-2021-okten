@@ -6,9 +6,10 @@ import {UserModule} from "../user/user.module";
 import {UserService} from "../user/user.service";
 import {PrismaService} from "../core/prisma.service";
 import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
+import {FileUploadCloudinaryService} from "../fileupload-cloudinary/fileupload-cloudinary.service";
 
 @Module({
-  providers: [AuthService, UserService, PrismaService,FileUploadAwsService],
+  providers: [AuthService, UserService, PrismaService,FileUploadAwsService,FileUploadCloudinaryService],
   controllers: [AuthController],
   imports: [
     forwardRef(() => UserModule),

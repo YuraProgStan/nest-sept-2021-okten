@@ -5,14 +5,12 @@ import {S3} from "aws-sdk";
 @Injectable()
 export class FileUploadAwsService {
     async upload(file, itemType, itemId) {
-        console.log(file)
         const { originalname } = file;
         const bucketS3 = process.env.S3_NAME;
-        await this.uploadS3(file.buffer, bucketS3, itemType, itemId, originalname);
+       return  await this.uploadS3(file.buffer, bucketS3, itemType, itemId, originalname);
     }
 
  private   async uploadS3(file, bucket, itemType, itemId, originalname) {
-
         const uploadFilePath = this.fileNameBuilder(originalname, itemType, itemId);
         console.log(uploadFilePath)
         const s3 = this.getS3();
@@ -25,10 +23,9 @@ export class FileUploadAwsService {
         };
 
         try{
-            const uploadResult = await s3.upload(params).promise();
-            const  url = uploadResult.Location;
-            console.log(url);
-            return  url
+            const sendData =  await s3.upload(params).promise();
+            return  sendData.Location;
+
         }catch (e) {
             throw  new HttpException('problem with uploading file on aws', HttpStatus.BAD_REQUEST)
         }
