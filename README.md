@@ -56,6 +56,9 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+
+# test newman
+$ npm run test_newman
 ```
 
 ## Support

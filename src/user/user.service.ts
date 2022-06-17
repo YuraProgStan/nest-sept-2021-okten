@@ -31,7 +31,6 @@ constructor(private prismaService: PrismaService,
     }
 
   async  createUser(data: Prisma.UserCreateInput): Promise<User> {
-    console.log(data);
         const findUser = await this.getUserByEmail(data.email);
         if (findUser) {
             throw  new HttpException('user is already exist', HttpStatus.BAD_REQUEST)

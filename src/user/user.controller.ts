@@ -21,6 +21,7 @@ import {diskStorage} from "multer";
 import {imageFileFilter} from "../utils/image.filter";
 import {watchFile} from "fs";
 import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
+import {editFileName} from "../utils/edit.file.name";
 
 @ApiTags('users')
 @Controller('users')
@@ -81,12 +82,14 @@ export class UserController {
         return this.userService.getOneById(id);
     }
 
-    @HttpCode(HttpStatus.CREATED)
-    @Post()
-    createUser(
-        @Body() userDto: CreateUserDto) {
-        return this.userService.createUser(userDto);
-    }
+    // @HttpCode(HttpStatus.CREATED)
+    // @Post()
+    // createUser(
+    //     @Req() req: MiddlewareRequestInterface,
+    //     @Body() userDto: CreateUserDto) {
+    //     const user = req.user;
+    //     return this.userService.createUser(userDto);
+    // }
 
     @ApiOperation({summary: 'Update user'})
     @ApiOkResponse({
@@ -108,14 +111,7 @@ export class UserController {
         FileInterceptor('avatar',{
             storage: diskStorage({
                 destination: './avatars',
-                filename: (req, file, callback) => {
-                    const randomName = Array(32)
-                        .fill(null)
-                        .map(() => Math.round(Math.random() * 16).toString(16))
-                        .join('');
-                    return callback(null, `${randomName}${file.originalname}`);
-
-                }
+                filename: editFileName
             }),
 
             fileFilter: imageFileFilter, limits: {fileSize: 1024*1024}})

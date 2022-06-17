@@ -1,0 +1,950 @@
+{
+	"info": {
+		"_postman_id": "4c81fd74-3a29-4c13-b15c-cbd9ab3cc0ea",
+		"name": "Nest september 2021",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20112957"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "POST REGISTRATION",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct response token\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Correct response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"    pm.expect(jsonData.city).to.be.a('string');\r",
+									"    pm.expect(jsonData.status).to.be.false\r",
+									"    pm.expect(jsonData.age).to.be.a('number');\r",
+									"    pm.expect(jsonData.password).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"token\", pm.response.json().token);\r",
+									"pm.environment.set(\"user-id\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testn1@gmail.com\",\r\n    \"password\": \"1234567\",\r\n    \"name\": \"Yura\",\r\n    \"age\": 25,\r\n    \"city\": \"Lviv\",\r\n    \"status\": false,\r\n    \"avatar\": \"https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/auth/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST LOGIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct response token\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a('string')\r",
+									"   \r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"token\", pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test27@gmail.com\",\r\n    \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "PUT UPDATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"avatar\", pm.response.json().avatar);\r",
+									"\r",
+									"pm.test(\"Correct response data include avatar\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.avatar).to.be.a('string');\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"    pm.expect(jsonData.city).to.be.a('string');\r",
+									"    pm.expect(jsonData.age).to.be.a('number');\r",
+									"    pm.expect(jsonData.password).to.be.a('string');\r",
+									"   \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"setTimeout(function(){\r",
+									"    console.log('Pre-request waiting')\r",
+									"}, 2000)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "./test/file/avatar.jpg"
+								},
+								{
+									"key": "name",
+									"value": "Sasha",
+									"type": "text"
+								},
+								{
+									"key": "age",
+									"value": "18",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Lviv",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/users/{{user-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"{{user-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const userId = pm.environment.get(\"user-id\");\r",
+									"pm.test(\"Check user id\",  () => {\r",
+									"    const jsonData = pm.response.json().id;\r",
+									"    pm.expect(jsonData).to.eql(userId);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/users/{{user-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"{{user-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const userId = pm.environment.get(\"user-id\");\r",
+									"\r",
+									"pm.test(\"Check is user exist in list\", () => {\r",
+									"    const userList = pm.response.json();\r",
+									"    const findUser = userList.filter(user => user.id === userId)\r",
+									"    pm.expect(findUser[0].id).to.eql(userId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET IMAGE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/users/avatar/{{avatar}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"avatar",
+								"{{avatar}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const userId = pm.environment.get(\"user-id\");\r",
+									"pm.test(\"Check deleted user id\",  () => {\r",
+									"    const jsonData = pm.response.json().id;\r",
+									"    pm.expect(jsonData).to.eql(userId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/users/{{user-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"{{user-id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "post",
+			"item": [
+				{
+					"name": "POST REGISTRATION Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct response token\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Correct response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.token).to.be.a('string');\r",
+									"    pm.expect(jsonData.id).to.be.a('number');\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"    pm.expect(jsonData.name).to.be.a('string');\r",
+									"    pm.expect(jsonData.city).to.be.a('string');\r",
+									"    pm.expect(jsonData.status).to.be.false\r",
+									"    pm.expect(jsonData.age).to.be.a('number');\r",
+									"    pm.expect(jsonData.password).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"token\", pm.response.json().token);\r",
+									"pm.environment.set(\"user-id\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"testn1@gmail.com\",\r\n    \"password\": \"1234567\",\r\n    \"name\": \"Yura\",\r\n    \"age\": 25,\r\n    \"city\": \"Lviv\",\r\n    \"status\": false,\r\n    \"avatar\": \"https://media.istockphoto.com/vectors/default-profile-picture-avatar-photo-placeholder-vector-illustration-vector-id1223671392?k=20&m=1223671392&s=612x612&w=0&h=lGpj2vWAI3WUT1JeJWm1PRoHT3V15_1pdcTn2szdwQ0=\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/auth/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"auth",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST CREATE POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"post-id\", pm.response.json().id);\r",
+									"const authorId = pm.environment.get(\"user-id\");\r",
+									"\r",
+									"pm.test(\"Correct create post response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.content).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.published).to.be.a(\"boolean\");\r",
+									"pm.expect(jsonData.authorId).to.be.a(\"number\");\r",
+									"pm.expect(jsonData.likes).to.be.a(\"number\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Correct getted authorId\", () => {\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.authorId).to.be.equal(authorId);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My title8\",\r\n    \"content\": \"My content6\",\r\n    \"published\": false,\r\n    \"authorId\": {{user-id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const postId = pm.environment.get(\"post-id\");\r",
+									"\r",
+									"pm.test(\"Check is post exist in list\", () => {\r",
+									"    const postList = pm.response.json();\r",
+									"    const findPost = postList.filter(post => post.id === postId)\r",
+									"    pm.expect(findPost[0].id).to.eql(postId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT UPDATE POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct update post response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.content).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.published).to.be.a(\"boolean\");\r",
+									"    pm.expect(jsonData.authorId).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData.likes).to.be.a(\"number\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My title6\",\r\n    \"content\": \"My content new2\",\r\n    \"published\": false,\r\n    \"authorId\": {{user-id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/posts/{{post-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts",
+								"{{post-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const postId = pm.environment.get(\"post-id\");\r",
+									"pm.test(\"Check post id\",  () => {\r",
+									"    const jsonData = pm.response.json().id;\r",
+									"    pm.expect(jsonData).to.eql(postId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/posts/{{post-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts",
+								"{{post-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const postId = pm.environment.get(\"post-id\");\r",
+									"pm.test(\"Check deleted post id\",  () => {\r",
+									"    const jsonData = pm.response.json().id;\r",
+									"    pm.expect(jsonData).to.eql(postId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/posts/{{post-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts",
+								"{{post-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT MULTIPLE IMAGE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct response images\", () => {\r",
+									"    const jsonDataList = pm.response.json();\r",
+									"   jsonDataList.map(item =>{\r",
+									"       if(item.hasOwnProperty(\"filename\")) {\r",
+									"           pm.expect(item.filename).to.be.a(\"string\")\r",
+									"       } \r",
+									"        if(item.hasOwnProperty(\"originalname\")) {\r",
+									"           pm.expect(item.originalname).to.be.a(\"string\")\r",
+									"       } \r",
+									"   })      \r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"setTimeout(function(){\r",
+									"    console.log('Pre-request waiting')\r",
+									"}, 2000)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": [
+										"./test/file/avatar.jpg",
+										"./test/file/avatar1.png"
+									]
+								},
+								{
+									"key": "name",
+									"value": "Sasha",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "18",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "city",
+									"value": "Lviv",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:4000/posts/multiple",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts",
+								"multiple"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "POST CREATE POST Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"post-id\", pm.response.json().id);\r",
+									"const authorId = pm.environment.get(\"user-id\");\r",
+									"\r",
+									"pm.test(\"Correct create post response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.title).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.content).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.published).to.be.a(\"boolean\");\r",
+									"pm.expect(jsonData.authorId).to.be.a(\"number\");\r",
+									"pm.expect(jsonData.likes).to.be.a(\"number\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Correct getted authorId\", () => {\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.authorId).to.be.equal(authorId);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My title7\",\r\n    \"content\": \"My content6\",\r\n    \"published\": false,\r\n    \"authorId\": {{user-id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/posts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST CREATE COMMENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"comment-id\", pm.response.json().id);\r",
+									"const authorId = pm.environment.get(\"user-id\");\r",
+									"const postId = pm.environment.get(\"post-id\");\r",
+									"\r",
+									"pm.test(\"Correct create comment response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.text).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.published).to.be.a(\"boolean\");\r",
+									"pm.expect(jsonData.authorId).to.be.a(\"number\");\r",
+									"pm.expect(jsonData.postId).to.be.a(\"number\");\r",
+									"\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Correct getted authorId\", () => {\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.authorId).to.be.equal(authorId);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct getted postId\", () => {\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.postId).to.be.equal(postId);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"My text8\",\r\n    \"published\": false,\r\n    \"authorId\": {{user-id}},\r\n    \"postId\": {{post-id}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const commentId = pm.environment.get(\"comment-id\");\r",
+									"\r",
+									"pm.test(\"Check is post exist in list\", () => {\r",
+									"    const postList = pm.response.json();\r",
+									"    const findComment = postList.filter(comment => comment.id === commentId)\r",
+									"    pm.expect(findComment[0].id).to.eql(commentId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const commentId = pm.environment.get(\"comment-id\");\r",
+									"pm.test(\"Check post id\",  () => {\r",
+									"    const jsonData = pm.response.json().id;\r",
+									"    pm.expect(jsonData).to.eql(commentId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/comments/{{comment-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"comments",
+								"{{comment-id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT UPDATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct update post response data\", () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.text).to.be.a(\"string\");\r",
+									"    pm.expect(jsonData.published).to.be.a(\"boolean\");\r",
+									"    pm.expect(jsonData.authorId).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData.postId).to.be.a(\"number\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"My new text2\",\r\n    \"published\": true,\r\n    \"authorId\": 1,\r\n    \"postId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/comments/{{comment-id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"comments",
+								"{{comment-id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
