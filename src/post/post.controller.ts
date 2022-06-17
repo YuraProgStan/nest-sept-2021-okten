@@ -1,8 +1,24 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    Post,
+    Put,
+    UploadedFiles,
+    UseInterceptors
+} from '@nestjs/common';
 import {PostService} from "./post.service";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {PostUpdateDto} from "./dto/post-update.dto";
 import {ApiOkResponse, ApiOperation, ApiTags} from "@nestjs/swagger";
+import {FilesInterceptor} from "@nestjs/platform-express";
+import {diskStorage} from "multer";
+import {imageFileFilter} from "../utils/image.filter";
+import {editFileName} from "../utils/edit.file.name";
 
 @ApiTags('posts')
 @Controller('posts')
@@ -109,5 +125,28 @@ export class PostController {
     @Put('/:id')
     updatePost(@Body() postUpdateDto: PostUpdateDto, @Param('id') id: string,) {
         return this.postService.updatePost(postUpdateDto, id);
+    }
+
+
+    @Post('multiple')
+    @UseInterceptors(
+        FilesInterceptor('image', 20, {
+            storage: diskStorage({
+                destination: './images',
+                filename: editFileName,
+            }),
+            fileFilter: imageFileFilter,
+        }),
+    )
+    async uploadMultipleFiles(@UploadedFiles() files) {
+        const response = [];
+        files.forEach(file => {
+            const fileReponse = {
+                originalname: file.originalname,
+                filename: file.filename,
+            };
+            response.push(fileReponse);
+        });
+        return response;
     }
 }

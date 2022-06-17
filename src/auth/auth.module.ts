@@ -9,7 +9,7 @@ import {FileUploadAwsService} from "../fileupload-aws/fileupload-aws.service";
 import {FileUploadCloudinaryService} from "../fileupload-cloudinary/fileupload-cloudinary.service";
 
 @Module({
-  providers: [AuthService, UserService, PrismaService,FileUploadAwsService,FileUploadCloudinaryService],
+  providers: [AuthService, UserService, PrismaService,FileUploadAwsService,FileUploadCloudinaryService,],
   controllers: [AuthController],
   imports: [
     forwardRef(() => UserModule),

@@ -40,7 +40,7 @@ export class FileUploadCloudinaryService {
             .fill(null)
             .map(() => Math.round(Math.random() * 16).toString(16))
             .join('');
-        const parseName = path.parse(fileName).name;
-        return `${randomName}${parseName}`
+        const name = path.parse(fileName).name;
+        return `${name}-${randomName}`
     }
 }

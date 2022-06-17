@@ -5,8 +5,8 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    Param,
-    Put, Res, UploadedFile,
+    Param, Post,
+    Put, Req, Res, UploadedFile,
     UseGuards, UseInterceptors
 } from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
@@ -81,14 +81,12 @@ export class UserController {
         return this.userService.getOneById(id);
     }
 
-    // @HttpCode(HttpStatus.CREATED)
-    // @Post()
-    // createUser(
-    //     @Req() req: MiddlewareRequestInterface,
-    //     @Body() userDto: CreateUserDto) {
-    //     const user = req.user;
-    //     return this.userService.createUser(userDto);
-    // }
+    @HttpCode(HttpStatus.CREATED)
+    @Post()
+    createUser(
+        @Body() userDto: CreateUserDto) {
+        return this.userService.createUser(userDto);
+    }
 
     @ApiOperation({summary: 'Update user'})
     @ApiOkResponse({
@@ -107,7 +105,20 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     @Put('/:id')
     @UseInterceptors(
-        FileInterceptor('avatar',{fileFilter: imageFileFilter, limits: {fileSize: 1024*1024}})
+        FileInterceptor('avatar',{
+            storage: diskStorage({
+                destination: './avatars',
+                filename: (req, file, callback) => {
+                    const randomName = Array(32)
+                        .fill(null)
+                        .map(() => Math.round(Math.random() * 16).toString(16))
+                        .join('');
+                    return callback(null, `${randomName}${file.originalname}`);
+
+                }
+            }),
+
+            fileFilter: imageFileFilter, limits: {fileSize: 1024*1024}})
     )
     updateUser(
         @Body() updateDto: UpdateUserDto,

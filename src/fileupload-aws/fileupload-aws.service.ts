@@ -1,5 +1,5 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
-import path from "path";
+import * as path from "path";
 import {S3} from "aws-sdk";
 
 @Injectable()
@@ -40,12 +40,14 @@ export class FileUploadAwsService {
         // });
     }
     private fileNameBuilder(fileName: string, itemType: string, itemId: number): string{
+        const name = fileName.split('.')[0];
+        const fileExtName = path.extname(fileName);
         const randomName = Array(32)
             .fill(null)
             .map(() => Math.round(Math.random() * 16).toString(16))
             .join('');
 
-        return `${itemType}/${itemId}/${randomName}${fileName}`
+        return `${itemType}/${itemId}/${name}-${randomName}${fileExtName}`
     }
 
   getS3() {

@@ -14,7 +14,7 @@ import {FileUploadCloudinaryService} from "../fileupload-cloudinary/fileupload-c
     imports: [
         forwardRef(() => AuthModule),
         FileUploadAwsModule,
-        FileUploadCloudinaryModule
+        FileUploadCloudinaryModule,
     ],
     providers: [UserService, PrismaService, JwtService, FileUploadAwsService, FileUploadCloudinaryService],
 

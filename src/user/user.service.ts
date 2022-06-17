@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {PrismaService} from "../core/prisma.service";
 import {Post, Prisma, User} from '@prisma/client';
 import {UpdateUserDto} from "./dto/update-user.dto";
@@ -7,7 +7,10 @@ import {FileUploadCloudinaryService} from "../fileupload-cloudinary/fileupload-c
 
 @Injectable()
 export class UserService {
-constructor(private prismaService: PrismaService, private fileUploadAwsService:FileUploadAwsService, private fileUploadCloudinaryService:FileUploadCloudinaryService) {
+constructor(private prismaService: PrismaService,
+            private fileUploadAwsService:FileUploadAwsService,
+            private fileUploadCloudinaryService:FileUploadCloudinaryService,
+           ) {
 }
 
     getAllUsers():Promise<User[]> {
@@ -27,15 +30,21 @@ constructor(private prismaService: PrismaService, private fileUploadAwsService:F
     })
     }
 
-    createUser(data: Prisma.UserCreateInput): Promise<User> {
-       return  this.prismaService.user.create({data})
+  async  createUser(data: Prisma.UserCreateInput): Promise<User> {
+    console.log(data);
+        const findUser = await this.getUserByEmail(data.email);
+        if (findUser) {
+            throw  new HttpException('user is already exist', HttpStatus.BAD_REQUEST)
+        }
+       return await this.prismaService.user.create({data})
     }
 
     async updateUser(userData: UpdateUserDto, userId: string, file) {
         try{
             if(file){
                 // const avatarPath = await this.fileUploadAwsService.upload(file, 'avatar', userId) //aws
-                const avatarPath = await this.fileUploadCloudinaryService.upload(file, 'avatar', userId); //cloudinary
+                // const avatarPath = await this.fileUploadCloudinaryService.upload(file, 'avatar', userId); //cloudinary
+                const avatarPath = file.filename //server
                 console.log(avatarPath);
                 return this.prismaService.user.update({
                     where: {id: Number(userId)},
